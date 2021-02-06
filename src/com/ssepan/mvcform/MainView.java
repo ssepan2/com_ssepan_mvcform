@@ -6,7 +6,7 @@ package com.ssepan.mvcform;
 import com.ssepan.utility.*;
 import com.ssepan.application.mvvm.*;
 import java.util.logging.Level;
-
+import javax.swing.*;
 /**
  *
  * @author ssepan
@@ -31,6 +31,7 @@ public class MainView
         MainView.returnValue = RETURNCODE_INCOMPLETE;  //default to Incomplete code
         
         initComponents();
+        
     }
 
     // </editor-fold>
@@ -47,7 +48,7 @@ public class MainView
         StatusMessage = new javax.swing.JLabel();
         ErrorMessage = new javax.swing.JLabel();
         ProgressBar = new javax.swing.JProgressBar();
-        jButton2 = new javax.swing.JButton();
+        DirtyIconButton = new javax.swing.JButton();
         ActionIconButton = new javax.swing.JButton();
         ToolBar = new javax.swing.JToolBar();
         FileNewButton = new javax.swing.JButton();
@@ -116,6 +117,7 @@ public class MainView
         HelpAboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("MvcForm");
         setPreferredSize(new java.awt.Dimension(640, 480));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -127,23 +129,20 @@ public class MainView
         StatusBar.setPreferredSize(new java.awt.Dimension(311, 44));
 
         StatusMessage.setForeground(new java.awt.Color(0, 128, 0));
-        StatusMessage.setText("Status");
 
         ErrorMessage.setForeground(new java.awt.Color(255, 0, 0));
-        ErrorMessage.setText("Error");
 
         ProgressBar.setEnabled(false);
         ProgressBar.setPreferredSize(new java.awt.Dimension(150, 22));
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Save.png"))); // NOI18N
-        jButton2.setToolTipText("dirty");
-        jButton2.setEnabled(false);
-        jButton2.setMaximumSize(new java.awt.Dimension(22, 22));
-        jButton2.setMinimumSize(new java.awt.Dimension(22, 22));
-        jButton2.setName("DirtyIconButton"); // NOI18N
-        jButton2.setPreferredSize(new java.awt.Dimension(22, 22));
+        DirtyIconButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Save.png"))); // NOI18N
+        DirtyIconButton.setToolTipText("dirty");
+        DirtyIconButton.setEnabled(false);
+        DirtyIconButton.setMaximumSize(new java.awt.Dimension(22, 22));
+        DirtyIconButton.setMinimumSize(new java.awt.Dimension(22, 22));
+        DirtyIconButton.setName("DirtyIconButton"); // NOI18N
+        DirtyIconButton.setPreferredSize(new java.awt.Dimension(22, 22));
 
-        ActionIconButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Save.png"))); // NOI18N
         ActionIconButton.setToolTipText("action");
         ActionIconButton.setEnabled(false);
         ActionIconButton.setMaximumSize(new java.awt.Dimension(22, 22));
@@ -162,7 +161,7 @@ public class MainView
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ActionIconButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(DirtyIconButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(StatusBarLayout.createSequentialGroup()
                 .addComponent(ErrorMessage)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -171,10 +170,10 @@ public class MainView
             StatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StatusBarLayout.createSequentialGroup()
                 .addComponent(ErrorMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(StatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(DirtyIconButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ActionIconButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(ProgressBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(StatusMessage, javax.swing.GroupLayout.Alignment.TRAILING)))
@@ -766,12 +765,15 @@ private void delayFor(double dt) {
     }
 
     private Boolean Something() {
-          //give the app time to draw the eye-candy, even if its only for an instant
-          Thread.yield();
-          //Common.DoEvents();
+        Boolean returnValue = false;
+
+        //give the app time to draw the eye-candy, even if its only for an instant
+        Thread.yield();
 
         delayFor(3000);
-        return true;
+        
+        returnValue=true;
+        return returnValue;
     }
     
     private void FileNewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileNewMenuItemActionPerformed
@@ -785,11 +787,12 @@ private void delayFor(double dt) {
 
             
             //use progress bar (marquee) with action icon (where available) in status bar
-            ViewModelBase.StartProgressBar("New...",null, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton,FileNewMenuItem.getIcon());
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileNewMenuItem.getIcon());
             
-//            //perform sender disable/enable in all actions
-//            TAction(Sender).Enabled := False;
-            
+            //perform sender disable in all actions
+            FileNewMenuItem.setEnabled(false);
+            FileNewButton.setEnabled(false);
+  
             if (Something()) {
                sStatusMessage = "New done.";
             }
@@ -798,14 +801,19 @@ private void delayFor(double dt) {
             }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
-            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton);
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
             //always do something
-            //TAction(Sender).Enabled := True;
-            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton);
+
+            //perform sender enable in all actions
+            FileNewMenuItem.setEnabled(true);
+            FileNewButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
             
         }
     }//GEN-LAST:event_FileNewMenuItemActionPerformed
@@ -1327,6 +1335,7 @@ private void delayFor(double dt) {
     // <editor-fold defaultstate="collapsed" desc="Declarations">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ActionIconButton;
+    private javax.swing.JButton DirtyIconButton;
     private javax.swing.JButton EditCopyButton;
     private javax.swing.JMenuItem EditCopyMenuItem;
     private javax.swing.JButton EditCutButton;
@@ -1384,7 +1393,6 @@ private void delayFor(double dt) {
     private javax.swing.JMenuItem WindowNewWindowMenuItem;
     private javax.swing.JMenuItem WindowShowMenuItem;
     private javax.swing.JMenuItem WindowTileMenuItem;
-    private javax.swing.JButton jButton2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JToolBar.Separator jSeparator11;
