@@ -66,7 +66,7 @@ public class MainView
         EditRefreshButton = new javax.swing.JButton();
         EditPropertiesButton = new javax.swing.JButton();
         jSeparator12 = new javax.swing.JToolBar.Separator();
-        HelpContentsButton = new javax.swing.JButton();
+        HelpHelpContentsButton = new javax.swing.JButton();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         FileNewMenuItem = new javax.swing.JMenuItem();
@@ -362,17 +362,17 @@ public class MainView
         ToolBar.add(EditPropertiesButton);
         ToolBar.add(jSeparator12);
 
-        HelpContentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Help.png"))); // NOI18N
-        HelpContentsButton.setToolTipText("Help");
-        HelpContentsButton.setFocusable(false);
-        HelpContentsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        HelpContentsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        HelpContentsButton.addActionListener(new java.awt.event.ActionListener() {
+        HelpHelpContentsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Help.png"))); // NOI18N
+        HelpHelpContentsButton.setToolTipText("Help");
+        HelpHelpContentsButton.setFocusable(false);
+        HelpHelpContentsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        HelpHelpContentsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        HelpHelpContentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 HelpHelpContentsMenuItemActionPerformed(evt);
             }
         });
-        ToolBar.add(HelpContentsButton);
+        ToolBar.add(HelpHelpContentsButton);
 
         FileMenu.setMnemonic('F');
         FileMenu.setText("File");
@@ -784,7 +784,6 @@ private void delayFor(double dt) {
             //clear status, error messages at beginning of every action
            sStatusMessage="New...";
            sErrorMessage="";
-
             
             //use progress bar (marquee) with action icon (where available) in status bar
             ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileNewMenuItem.getIcon());
@@ -794,7 +793,7 @@ private void delayFor(double dt) {
             FileNewButton.setEnabled(false);
   
             if (Something()) {
-               sStatusMessage = "New done.";
+               sStatusMessage = "New finished.";
             }
             else {
                sStatusMessage = "New cancelled.";
@@ -814,520 +813,1249 @@ private void delayFor(double dt) {
             FileNewButton.setEnabled(true);
 
             ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
-            
         }
     }//GEN-LAST:event_FileNewMenuItemActionPerformed
 
     private void FileOpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOpenMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
-        
+        String sStatusMessage="";
+        String sErrorMessage="";
+       
         try {
-            StatusMessage.setText("FileOpen");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Open...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileOpenMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FileOpenMenuItem.setEnabled(false);
+            FileOpenButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Open finished.";
+            }
+            else {
+               sStatusMessage = "Open cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FileOpenMenuItem.setEnabled(true);
+            FileOpenButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileOpenMenuItemActionPerformed
 
     private void FileSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("FileSave");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Save...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileSaveMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FileSaveMenuItem.setEnabled(false);
+            FileSaveButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Save finished.";
+            }
+            else {
+               sStatusMessage = "Save cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FileSaveMenuItem.setEnabled(true);
+            FileSaveButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileSaveMenuItemActionPerformed
 
     private void FileSaveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveAsMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("FileSaveAs");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Save As...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileSaveAsMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FileSaveAsMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Save As finished.";
+            }
+            else {
+               sStatusMessage = "Save As cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FileSaveAsMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileSaveAsMenuItemActionPerformed
 
     private void FilePrintMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FilePrintMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("FilePrint");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Print...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FilePrintMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FilePrintMenuItem.setEnabled(false);
+            FilePrintButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Print finished.";
+            }
+            else {
+               sStatusMessage = "Print cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FilePrintMenuItem.setEnabled(true);
+            FilePrintButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FilePrintMenuItemActionPerformed
 
     private void FilePrintSetupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FilePrintSetupMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("FilePrintSetup");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Print Setup...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FilePrintSetupMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FilePrintSetupMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Print Setup finished.";
+            }
+            else {
+               sStatusMessage = "Print Setup cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FilePrintSetupMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FilePrintSetupMenuItemActionPerformed
 
     private void FileExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileExitMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("FileExit");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Exit...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileExitMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            FileExitMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
+            }
+            else {
+               sStatusMessage = "Exit cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            FileNewButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileExitMenuItemActionPerformed
 
     private void EditUndoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditUndoMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-        StatusMessage.setText("EditUndo");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Undo...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditUndoMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditUndoMenuItem.setEnabled(false);
+            EditUndoButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Undo finished.";
+            }
+            else {
+               sStatusMessage = "Undo cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditUndoMenuItem.setEnabled(true);
+            EditUndoButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditUndoMenuItemActionPerformed
 
     private void EditRedoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditRedoMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("EditRedo");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Redo...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditRedoMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditRedoMenuItem.setEnabled(false);
+            EditRedoButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Redo finished.";
+            }
+            else {
+               sStatusMessage = "Redo cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditRedoMenuItem.setEnabled(true);
+            EditRedoButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditRedoMenuItemActionPerformed
 
     private void EditSelectAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditSelectAllMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditSelectAll");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Select All...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditSelectAllMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditSelectAllMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Select All finished.";
+            }
+            else {
+               sStatusMessage = "Select All cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditSelectAllMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditSelectAllMenuItemActionPerformed
 
     private void EditCutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCutMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditCut");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Cut...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditCutMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditCutMenuItem.setEnabled(false);
+            EditCutButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Cut finished.";
+            }
+            else {
+               sStatusMessage = "Cut cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditCutMenuItem.setEnabled(true);
+            EditCutButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditCutMenuItemActionPerformed
 
     private void EditCopyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCopyMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditCopy");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Copy...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditCopyMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditCopyMenuItem.setEnabled(false);
+            EditCopyButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Copy finished.";
+            }
+            else {
+               sStatusMessage = "Copy cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditCopyMenuItem.setEnabled(true);
+            EditCopyButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditCopyMenuItemActionPerformed
 
     private void EditPasteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditPasteMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("EditPaste");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Paste...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditPasteMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditPasteMenuItem.setEnabled(false);
+            EditPasteButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Paste finished.";
+            }
+            else {
+               sStatusMessage = "Paste cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditPasteMenuItem.setEnabled(true);
+            EditPasteButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditPasteMenuItemActionPerformed
 
     private void EditPasteSpecialMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditPasteSpecialMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditPasteSpecial");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Paste Special...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditPasteSpecialMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditPasteSpecialMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Paste Special finished.";
+            }
+            else {
+               sStatusMessage = "Paste Special cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditPasteSpecialMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditPasteSpecialMenuItemActionPerformed
 
     private void EditDeleteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditDeleteMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("EditDelete");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Delete...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditDeleteMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditDeleteMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Delete finished.";
+            }
+            else {
+               sStatusMessage = "Delete cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditDeleteMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditDeleteMenuItemActionPerformed
 
     private void EditFindMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditFindMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditFind");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Find...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditFindMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditFindMenuItem.setEnabled(false);
+            EditFindButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Find finished.";
+            }
+            else {
+               sStatusMessage = "Find cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditFindMenuItem.setEnabled(true);
+            EditFindButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditFindMenuItemActionPerformed
 
     private void EditReplaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditReplaceMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-          StatusMessage.setText("EditReplace");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Replace...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditReplaceMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditReplaceMenuItem.setEnabled(false);
+            EditReplaceButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Replace finished.";
+            }
+            else {
+               sStatusMessage = "Replace cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditReplaceMenuItem.setEnabled(true);
+            EditReplaceButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditReplaceMenuItemActionPerformed
 
     private void EditGoToMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditGoToMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-          StatusMessage.setText("EditGoTo");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Go To...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditGoToMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditGoToMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Go To finished.";
+            }
+            else {
+               sStatusMessage = "Go To cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditGoToMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditGoToMenuItemActionPerformed
 
     private void EditRefreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditRefreshMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("EditRefresh");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Refresh...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditRefreshMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditRefreshMenuItem.setEnabled(false);
+            EditRefreshButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Refresh finished.";
+            }
+            else {
+               sStatusMessage = "Refresh cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditRefreshMenuItem.setEnabled(true);
+            EditRefreshButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditRefreshMenuItemActionPerformed
 
     private void EditPreferencesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditPreferencesMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("EditPreferences");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Preferences...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditPreferencesMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditPreferencesMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Preferences finished.";
+            }
+            else {
+               sStatusMessage = "Preferences cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditPreferencesMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditPreferencesMenuItemActionPerformed
 
     private void EditPropertiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditPropertiesMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-          StatusMessage.setText("EditProperties");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Properties...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,EditPropertiesMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            EditPropertiesMenuItem.setEnabled(false);
+            EditPropertiesButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Properties finished.";
+            }
+            else {
+               sStatusMessage = "Properties cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            EditPropertiesMenuItem.setEnabled(true);
+            EditPropertiesButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_EditPropertiesMenuItemActionPerformed
 
     private void WindowNewWindowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowNewWindowMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("WindowNewWindow");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="New Window...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowNewWindowMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowNewWindowMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "New Window finished.";
+            }
+            else {
+               sStatusMessage = "New Window cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowNewWindowMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowNewWindowMenuItemActionPerformed
 
     private void WindowTileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowTileMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("WindowTile");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Tile...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowTileMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowTileMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Tile finished.";
+            }
+            else {
+               sStatusMessage = "Tile cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowTileMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowTileMenuItemActionPerformed
 
     private void WindowCascadeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowCascadeMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-         StatusMessage.setText("WindowCascade");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Cascade...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowCascadeMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowCascadeMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Cascade finished.";
+            }
+            else {
+               sStatusMessage = "Cascade cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowCascadeMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowCascadeMenuItemActionPerformed
 
     private void WindowArrangeAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowArrangeAllMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("WindowArrangeAll");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Arrange All...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowArrangeAllMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowArrangeAllMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Arrange All finished.";
+            }
+            else {
+               sStatusMessage = "Arrange All cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowArrangeAllMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowArrangeAllMenuItemActionPerformed
 
     private void WindowHideMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowHideMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("WindowHide");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Hide...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowHideMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowHideMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Hide finished.";
+            }
+            else {
+               sStatusMessage = "Hide cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowHideMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowHideMenuItemActionPerformed
 
     private void WindowShowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WindowShowMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("WindowShow");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Show...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,WindowShowMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            WindowShowMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Show finished.";
+            }
+            else {
+               sStatusMessage = "Show cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            WindowShowMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_WindowShowMenuItemActionPerformed
 
     private void HelpHelpContentsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpHelpContentsMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("HelpHelpContents");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Help Contents...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpHelpContentsMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpHelpContentsMenuItem.setEnabled(false);
+            HelpHelpContentsButton.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Help Contents finished.";
+            }
+            else {
+               sStatusMessage = "Help Contents cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpHelpContentsMenuItem.setEnabled(true);
+            HelpHelpContentsButton.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpHelpContentsMenuItemActionPerformed
 
     private void HelpHelpIndexMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpHelpIndexMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("HelpHelpIndex");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Help Index...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpHelpIndexMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpHelpIndexMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Help Index finished.";
+            }
+            else {
+               sStatusMessage = "Help Index cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpHelpIndexMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpHelpIndexMenuItemActionPerformed
 
     private void HelpHelpOnHelpMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpHelpOnHelpMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-           StatusMessage.setText("HelpHelpOnHelp");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Help On Help...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpHelpOnHelpMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpHelpOnHelpMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Help On Help finished.";
+            }
+            else {
+               sStatusMessage = "Help On Help cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpHelpOnHelpMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpHelpOnHelpMenuItemActionPerformed
 
     private void HelpLicenceInformationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpLicenceInformationMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("HelpLicence");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Licence Information...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpLicenceInformationMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpLicenceInformationMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Licence Information finished.";
+            }
+            else {
+               sStatusMessage = "Licence Information cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpLicenceInformationMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpLicenceInformationMenuItemActionPerformed
 
     private void HelpCheckForUpdatesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpCheckForUpdatesMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
-            StatusMessage.setText("HelpCheckForUpdates");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="Check For Updates...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpCheckForUpdatesMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpCheckForUpdatesMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "Check For Updates finished.";
+            }
+            else {
+               sStatusMessage = "Check For Updates cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpCheckForUpdatesMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpCheckForUpdatesMenuItemActionPerformed
 
     private void HelpAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpAboutMenuItemActionPerformed
-        String sStatusMessage;
-        String sErrorMessage;
+        String sStatusMessage="";
+        String sErrorMessage="";
         
         try {
             
-            StatusMessage.setText("HelpAbout");
+            //clear status, error messages at beginning of every action
+           sStatusMessage="About...";
+           sErrorMessage="";
+            
+            //use progress bar (marquee) with action icon (where available) in status bar
+            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,HelpAboutMenuItem.getIcon());
+            
+            //perform sender disable in all actions
+            HelpAboutMenuItem.setEnabled(false);
+  
+            if (Something()) {
+               sStatusMessage = "About finished.";
+            }
+            else {
+               sStatusMessage = "About cancelled.";
+            }
         }
         catch (Exception ex) {
-            ErrorMessage.setText(ex.getMessage());
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            ViewModelBase.StopProgressBar("", sErrorMessage, StatusMessage, ErrorMessage, ProgressBar, ActionIconButton, StatusBar);
             Log.write(ex,Level.ALL);
         }
         finally {
-            
+            //always do something
+
+            //perform sender enable in all actions
+            HelpAboutMenuItem.setEnabled(true);
+
+            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpAboutMenuItemActionPerformed
 // </editor-fold>
@@ -1375,7 +2103,7 @@ private void delayFor(double dt) {
     public javax.swing.JMenuItem FileSaveMenuItem;
     public javax.swing.JMenuItem HelpAboutMenuItem;
     private javax.swing.JMenuItem HelpCheckForUpdatesMenuItem;
-    private javax.swing.JButton HelpContentsButton;
+    private javax.swing.JButton HelpHelpContentsButton;
     private javax.swing.JMenuItem HelpHelpContentsMenuItem;
     private javax.swing.JMenuItem HelpHelpIndexMenuItem;
     private javax.swing.JMenuItem HelpHelpOnHelpMenuItem;

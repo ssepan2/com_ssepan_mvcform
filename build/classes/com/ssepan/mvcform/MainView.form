@@ -895,7 +895,7 @@
         </Component>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator12">
         </Component>
-        <Component class="javax.swing.JButton" name="HelpContentsButton">
+        <Component class="javax.swing.JButton" name="HelpHelpContentsButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ssepan/mvcform/images/Help.png"/>
