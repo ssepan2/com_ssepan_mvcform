@@ -505,15 +505,45 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="ToolBar" alignment="1" max="32767" attributes="0"/>
+          <Component id="ToolBar" alignment="1" pref="665" max="32767" attributes="0"/>
           <Component id="StatusBar" alignment="0" pref="665" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="SomeIntegerLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeStringLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeBooleanLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="SomeBooleanCheckBox" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeIntegerTextField" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeStringTextField" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Component id="ToolBar" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace pref="394" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="SomeStringTextField" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeStringLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="SomeIntegerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeIntegerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="SomeBooleanCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="SomeBooleanLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="283" max="32767" attributes="0"/>
               <Component id="StatusBar" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -911,5 +941,50 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JLabel" name="SomeStringLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Some String:"/>
+        <Property name="name" type="java.lang.String" value="SomeStringLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SomeIntegerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Some Integer:"/>
+        <Property name="name" type="java.lang.String" value="SomeIntegerLabel" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="SomeStringTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="SomeStringTextField" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="SomeStringTextFieldPropertyChange"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="SomeStringTextFieldKeyReleased"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="SomeIntegerTextField">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="SomeIntegerTextField" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="SomeIntegerTextFieldPropertyChange"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="SomeIntegerTextFieldKeyReleased"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="SomeBooleanCheckBox">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="SomeBooleanCheckBox" noResource="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="SomeBooleanCheckBoxStateChanged"/>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="SomeBooleanCheckBoxPropertyChange"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SomeBooleanLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Some Boolean:"/>
+        <Property name="name" type="java.lang.String" value="SomeBooleanLabel" noResource="true"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

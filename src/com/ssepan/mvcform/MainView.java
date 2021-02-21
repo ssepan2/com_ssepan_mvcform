@@ -6,7 +6,7 @@ package com.ssepan.mvcform;
 import com.ssepan.utility.*;
 import com.ssepan.application.mvvm.*;
 import java.util.logging.Level;
-import javax.swing.*;
+//import javax.swing.*;
 /**
  *
  * @author ssepan
@@ -67,6 +67,12 @@ public class MainView
         EditPropertiesButton = new javax.swing.JButton();
         jSeparator12 = new javax.swing.JToolBar.Separator();
         HelpHelpContentsButton = new javax.swing.JButton();
+        SomeStringLabel = new javax.swing.JLabel();
+        SomeIntegerLabel = new javax.swing.JLabel();
+        SomeStringTextField = new javax.swing.JTextField();
+        SomeIntegerTextField = new javax.swing.JTextField();
+        SomeBooleanCheckBox = new javax.swing.JCheckBox();
+        SomeBooleanLabel = new javax.swing.JLabel();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         FileNewMenuItem = new javax.swing.JMenuItem();
@@ -373,6 +379,51 @@ public class MainView
             }
         });
         ToolBar.add(HelpHelpContentsButton);
+
+        SomeStringLabel.setText("Some String:");
+        SomeStringLabel.setName("SomeStringLabel"); // NOI18N
+
+        SomeIntegerLabel.setText("Some Integer:");
+        SomeIntegerLabel.setName("SomeIntegerLabel"); // NOI18N
+
+        SomeStringTextField.setName("SomeStringTextField"); // NOI18N
+        SomeStringTextField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                SomeStringTextFieldPropertyChange(evt);
+            }
+        });
+        SomeStringTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                SomeStringTextFieldKeyReleased(evt);
+            }
+        });
+
+        SomeIntegerTextField.setName("SomeIntegerTextField"); // NOI18N
+        SomeIntegerTextField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                SomeIntegerTextFieldPropertyChange(evt);
+            }
+        });
+        SomeIntegerTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                SomeIntegerTextFieldKeyReleased(evt);
+            }
+        });
+
+        SomeBooleanCheckBox.setName("SomeBooleanCheckBox"); // NOI18N
+        SomeBooleanCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                SomeBooleanCheckBoxStateChanged(evt);
+            }
+        });
+        SomeBooleanCheckBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                SomeBooleanCheckBoxPropertyChange(evt);
+            }
+        });
+
+        SomeBooleanLabel.setText("Some Boolean:");
+        SomeBooleanLabel.setName("SomeBooleanLabel"); // NOI18N
 
         FileMenu.setMnemonic('F');
         FileMenu.setText("File");
@@ -731,14 +782,38 @@ public class MainView
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ToolBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(ToolBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
             .addComponent(StatusBar, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(SomeIntegerLabel)
+                    .addComponent(SomeStringLabel)
+                    .addComponent(SomeBooleanLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SomeBooleanCheckBox)
+                    .addComponent(SomeIntegerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SomeStringTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(ToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 394, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SomeStringTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SomeStringLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SomeIntegerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SomeIntegerLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SomeBooleanCheckBox)
+                    .addComponent(SomeBooleanLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
                 .addComponent(StatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -749,9 +824,10 @@ public class MainView
     {//GEN-HEADEREND:event_formWindowClosed
 	System.exit(returnValue);
     }//GEN-LAST:event_formWindowClosed
-// <editor-fold defaultstate="collapsed" desc="actions">
-private void delayFor(double dt) {
-  double tc;
+
+    // <editor-fold defaultstate="collapsed" desc="actions">
+    private void delayFor(double dt) {
+        double tc;
         tc = System.currentTimeMillis();
         do {
 
@@ -2058,6 +2134,30 @@ private void delayFor(double dt) {
             ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_HelpAboutMenuItemActionPerformed
+
+    private void SomeStringTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SomeStringTextFieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeStringTextFieldKeyReleased
+
+    private void SomeIntegerTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SomeIntegerTextFieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeIntegerTextFieldKeyReleased
+
+    private void SomeBooleanCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SomeBooleanCheckBoxStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeBooleanCheckBoxStateChanged
+
+    private void SomeStringTextFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeStringTextFieldPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeStringTextFieldPropertyChange
+
+    private void SomeIntegerTextFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeIntegerTextFieldPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeIntegerTextFieldPropertyChange
+
+    private void SomeBooleanCheckBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeBooleanCheckBoxPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SomeBooleanCheckBoxPropertyChange
 // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Declarations">
@@ -2111,6 +2211,12 @@ private void delayFor(double dt) {
     private javax.swing.JMenu HelpMenu;
     private javax.swing.JMenuBar MainMenu;
     private javax.swing.JProgressBar ProgressBar;
+    private javax.swing.JCheckBox SomeBooleanCheckBox;
+    private javax.swing.JLabel SomeBooleanLabel;
+    private javax.swing.JLabel SomeIntegerLabel;
+    private javax.swing.JTextField SomeIntegerTextField;
+    private javax.swing.JLabel SomeStringLabel;
+    private javax.swing.JTextField SomeStringTextField;
     private javax.swing.JPanel StatusBar;
     private javax.swing.JLabel StatusMessage;
     private javax.swing.JToolBar ToolBar;
