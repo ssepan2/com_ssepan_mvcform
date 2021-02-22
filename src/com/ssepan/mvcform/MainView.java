@@ -1,6 +1,6 @@
 package com.ssepan.mvcform;
 
-//import java.awt.*;
+import java.awt.event.*;
 //import javax.swing.*;
 //import java.util.logging.*;
 import com.ssepan.utility.*;
@@ -1152,8 +1152,8 @@ public class MainView
             //perform sender disable in all actions
             FileExitMenuItem.setEnabled(false);
   
-            //TODO:initiate close of window/frame, allowing the WindowsClosing and WindowCLosed events to do their jobs
-            //?
+            //initiate close of window/frame, in a way that allows the WindowsClosing and WindowCLosed events to do their jobs
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 //            if (Something()) {
 //               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
 //            }
