@@ -1152,7 +1152,7 @@ public class MainView
             //perform sender disable in all actions
             FileExitMenuItem.setEnabled(false);
   
-            //TODO:close window/frame
+            //TODO:initiate close of window/frame, allowing the WindowsClosing and WindowCLosed events to do their jobs
             //?
 //            if (Something()) {
 //               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
