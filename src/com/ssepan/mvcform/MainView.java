@@ -5,7 +5,12 @@ package com.ssepan.mvcform;
 //import java.util.logging.*;
 import com.ssepan.utility.*;
 import com.ssepan.application.mvvm.*;
+import com.ssepan.mvclibrary.*;
+import java.beans.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
+import javax.swing.WindowConstants;
 //import javax.swing.*;
 /**
  *
@@ -13,6 +18,7 @@ import java.util.logging.Level;
  */
 public class MainView
     extends javax.swing.JFrame
+    implements PropertyChangeListener
 {
     
     // <editor-fold defaultstate="collapsed" desc="Declarations">
@@ -22,16 +28,34 @@ public class MainView
 
     //Because MainView contains the entry point, it will contains the return code definitions and call System.exit()
     public static Integer returnValue;
+    
+    private MvcModel objModel ;
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructor">
     /** Creates new form MainView */
-    public MainView()
-    {
-        MainView.returnValue = RETURNCODE_INCOMPLETE;  //default to Incomplete code
-        
+    public MainView()  {
+        String sStatusMessage="";
+        String sErrorMessage="";
+
         initComponents();
         
+        try {
+            MainView.returnValue = RETURNCODE_INCOMPLETE;  //default to Incomplete code
+
+            Log.setPackageName("com.ssepan.mvcform");
+            
+            //this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            
+
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            //Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
     }
 
     // </editor-fold>
@@ -124,10 +148,17 @@ public class MainView
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MvcForm");
+        setName("MvcFormFrame"); // NOI18N
         setPreferredSize(new java.awt.Dimension(640, 480));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -387,11 +418,6 @@ public class MainView
         SomeIntegerLabel.setName("SomeIntegerLabel"); // NOI18N
 
         SomeStringTextField.setName("SomeStringTextField"); // NOI18N
-        SomeStringTextField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                SomeStringTextFieldPropertyChange(evt);
-            }
-        });
         SomeStringTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 SomeStringTextFieldKeyReleased(evt);
@@ -399,11 +425,6 @@ public class MainView
         });
 
         SomeIntegerTextField.setName("SomeIntegerTextField"); // NOI18N
-        SomeIntegerTextField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                SomeIntegerTextFieldPropertyChange(evt);
-            }
-        });
         SomeIntegerTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 SomeIntegerTextFieldKeyReleased(evt);
@@ -411,14 +432,9 @@ public class MainView
         });
 
         SomeBooleanCheckBox.setName("SomeBooleanCheckBox"); // NOI18N
-        SomeBooleanCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                SomeBooleanCheckBoxStateChanged(evt);
-            }
-        });
-        SomeBooleanCheckBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                SomeBooleanCheckBoxPropertyChange(evt);
+        SomeBooleanCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                SomeBooleanCheckBoxItemStateChanged(evt);
             }
         });
 
@@ -793,8 +809,8 @@ public class MainView
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SomeBooleanCheckBox)
-                    .addComponent(SomeIntegerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SomeStringTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SomeIntegerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SomeStringTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -810,7 +826,7 @@ public class MainView
                     .addComponent(SomeIntegerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SomeIntegerLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SomeBooleanCheckBox)
                     .addComponent(SomeBooleanLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
@@ -820,35 +836,68 @@ public class MainView
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
-    {//GEN-HEADEREND:event_formWindowClosed
-	System.exit(returnValue);
-    }//GEN-LAST:event_formWindowClosed
+    public void propertyChange(PropertyChangeEvent e)  {
+        String sStatusMessage="";
+        String sErrorMessage="";
+
+        try {
+            System.out.println(String.format("propertyChange %s ''%s'' ''%s''",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
+            //TODO:
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="actions">
     private void delayFor(double dt) {
+        String sStatusMessage="";
+        String sErrorMessage="";
         double tc;
-        tc = System.currentTimeMillis();
-        do {
 
-            //give the app time to draw the eye-candy, even if its only for an instant
-          Thread.yield();
-//          Common.DoEvents();
-  
-        } while (System.currentTimeMillis() < (tc + dt));
+        try {
+            tc = System.currentTimeMillis();
+            do {
 
+                //give the app time to draw the eye-candy, even if its only for an instant
+              Thread.yield();
+              //Common.DoEvents();
 
+            } while (System.currentTimeMillis() < (tc + dt));
+       } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
     }
 
     private Boolean Something() {
+        String sStatusMessage="";
+        String sErrorMessage="";
         Boolean returnValue = false;
 
-        //give the app time to draw the eye-candy, even if its only for an instant
-        Thread.yield();
+        try {
 
-        delayFor(3000);
-        
-        returnValue=true;
+            //give the app time to draw the eye-candy, even if its only for an instant
+            Thread.yield();
+
+            delayFor(3000);
+
+            returnValue=true;
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
         return returnValue;
     }
     
@@ -1103,12 +1152,14 @@ public class MainView
             //perform sender disable in all actions
             FileExitMenuItem.setEnabled(false);
   
-            if (Something()) {
-               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
-            }
-            else {
-               sStatusMessage = "Exit cancelled.";
-            }
+            //TODO:close window/frame
+            //?
+//            if (Something()) {
+//               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
+//            }
+//            else {
+//               sStatusMessage = "Exit cancelled.";
+//            }
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -2136,28 +2187,115 @@ public class MainView
     }//GEN-LAST:event_HelpAboutMenuItemActionPerformed
 
     private void SomeStringTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SomeStringTextFieldKeyReleased
-        // TODO add your handling code here:
+        String sStatusMessage="";
+        String sErrorMessage="";
+        try {
+            System.out.println("SomeStringTextFieldKeyReleased");
+            if (objModel != null)  {
+                objModel.setSomeStringField(SomeStringTextField.getText());
+            } 
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
     }//GEN-LAST:event_SomeStringTextFieldKeyReleased
 
     private void SomeIntegerTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SomeIntegerTextFieldKeyReleased
-        // TODO add your handling code here:
+        String sStatusMessage="";
+        String sErrorMessage="";
+        try {
+            System.out.println("SomeIntegerTextFieldKeyReleased");
+            if (objModel != null)  {
+                objModel.setSomeIntegerField(Integer.parseInt(SomeIntegerTextField.getText()));
+            } 
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
     }//GEN-LAST:event_SomeIntegerTextFieldKeyReleased
 
-    private void SomeBooleanCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SomeBooleanCheckBoxStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SomeBooleanCheckBoxStateChanged
+    private void SomeBooleanCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SomeBooleanCheckBoxItemStateChanged
+        String sStatusMessage="";
+        String sErrorMessage="";
+        try {
+            System.out.println("SomeBooleanCheckBoxItemStateChanged");
+            if (objModel != null)  {
+                objModel.setSomeBooleanField(SomeBooleanCheckBox.isSelected());
+            } 
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
 
-    private void SomeStringTextFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeStringTextFieldPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SomeStringTextFieldPropertyChange
+        }
+    }//GEN-LAST:event_SomeBooleanCheckBoxItemStateChanged
+    
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {                                                                    
+        String sStatusMessage="";
+        String sErrorMessage="";
 
-    private void SomeIntegerTextFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeIntegerTextFieldPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SomeIntegerTextFieldPropertyChange
+        try {
+            System.out.println("formWindowOpened begin");
+            objModel = new MvcModel();
+            objModel.addPropertyChangeListener(this);
+            System.out.println("formWindowOpened end");
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
 
-    private void SomeBooleanCheckBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_SomeBooleanCheckBoxPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SomeBooleanCheckBoxPropertyChange
+        }
+    }                                                                  
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
+    {//GEN-HEADEREND:event_formWindowClosed
+        String sStatusMessage="";
+        String sErrorMessage="";
+
+        try {
+            MainView.returnValue = RETURNCODE_COMPLETE;  //return Complete code
+            System.exit(returnValue);
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        String sStatusMessage="";
+        String sErrorMessage="";
+
+        try {
+            System.out.println("formWindowClosing begin");
+            objModel.removePropertyChangeListener(this);
+            objModel = null;
+            System.out.println("formWindowClosing end");
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+
+        }
+    }//GEN-LAST:event_formWindowClosing
+
 // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Declarations">
@@ -2242,6 +2380,7 @@ public class MainView
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
+//NOTE: this is done in Program.java instead
 //    /**
 //     * main() is entry point, and calls MainView ctor() as part of running view.
 //     * @param args the command line arguments

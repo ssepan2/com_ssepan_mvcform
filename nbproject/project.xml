@@ -24,6 +24,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>Com_Ssepan_MvcLibrary</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>Com_Ssepan_Utility</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
