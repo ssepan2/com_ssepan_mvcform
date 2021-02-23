@@ -7,10 +7,10 @@ import com.ssepan.utility.*;
 import com.ssepan.application.mvvm.*;
 import com.ssepan.mvclibrary.*;
 import java.beans.*;
-import java.util.HashSet;
-import java.util.Set;
+//import java.util.HashSet;
+//import java.util.Set;
 import java.util.logging.Level;
-import javax.swing.WindowConstants;
+//import javax.swing.WindowConstants;
 //import javax.swing.*;
 /**
  *
@@ -25,11 +25,15 @@ public class MainView
     public static Integer RETURNCODE_INCOMPLETE = -1;
     public static Integer RETURNCODE_COMPLETE = 0;
     //public static Integer RETURNCODE_SOMEPROBLEM = 1;
+    public static String APP_TITLE_FORMAT  = "'%s' - NetBeans Java Swing GUI Generic";
 
+    
     //Because MainView contains the entry point, it will contains the return code definitions and call System.exit()
     public static Integer returnValue;
     
     private MvcModel objModel ;
+    private Boolean  bStopControlEvents=false;
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructor">
@@ -839,17 +843,64 @@ public class MainView
     public void propertyChange(PropertyChangeEvent e)  {
         String sStatusMessage="";
         String sErrorMessage="";
+        String propertyName="";
 
         try {
-            System.out.println(String.format("propertyChange %s ''%s'' ''%s''",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
-            //TODO:
+            System.out.println(String.format("propertyChange %s '%s' '%s'",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
+            //case statement handling individual properties, with flag to preventcontrols from firing back
+            
+            bStopControlEvents = true;
+            propertyName=e.getPropertyName();
+            switch(propertyName) {
+            case "Key":
+                {
+                    //update when Key directly edited or when new/open/save/saveas
+                    this.setTitle(String.format(APP_TITLE_FORMAT,objModel.getKey()));
+
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
+                    break;
+                }
+            case "someStringField":
+                {
+                    this.SomeStringTextField.setText(objModel.getSomeStringField());
+
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
+                    break;
+                }
+            case "someIntegerField":
+                {
+                    this.SomeIntegerTextField.setText(Integer.toString(objModel.getSomeIntegerField()));
+
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
+                    break;
+                }
+            case "someBooleanField":
+                {
+                    this.SomeBooleanCheckBox.setSelected(objModel.isSomeBooleanField());
+
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
+                    break;
+                }
+            case "Dirty":
+                {
+                    this.DirtyIconButton.setVisible(objModel.isDirty()); //use wrapper sub in viewmodel
+
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
+                    break;
+                }
+            default:
+                {
+                    System.out.println(String.format("unhandled event: '%s'",propertyName));
+                }
+            } //case
+            
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
             Log.write(ex,Level.ALL);
         } finally {
             //always do this
-
+           bStopControlEvents = false;
         }
     }
 
@@ -2191,9 +2242,11 @@ public class MainView
         String sErrorMessage="";
         try {
             System.out.println("SomeStringTextFieldKeyReleased");
-            if (objModel != null)  {
-                objModel.setSomeStringField(SomeStringTextField.getText());
-            } 
+            if (! bStopControlEvents) {
+                if (objModel != null)  {
+                    objModel.setSomeStringField(SomeStringTextField.getText());
+                } 
+            }
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
@@ -2208,10 +2261,12 @@ public class MainView
         String sStatusMessage="";
         String sErrorMessage="";
         try {
-            System.out.println("SomeIntegerTextFieldKeyReleased");
-            if (objModel != null)  {
-                objModel.setSomeIntegerField(Integer.parseInt(SomeIntegerTextField.getText()));
-            } 
+            if (! bStopControlEvents) {
+                System.out.println("SomeIntegerTextFieldKeyReleased");
+                if (objModel != null)  {
+                    objModel.setSomeIntegerField(Integer.parseInt(SomeIntegerTextField.getText()));
+                } 
+            }
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
@@ -2227,9 +2282,11 @@ public class MainView
         String sErrorMessage="";
         try {
             System.out.println("SomeBooleanCheckBoxItemStateChanged");
-            if (objModel != null)  {
-                objModel.setSomeBooleanField(SomeBooleanCheckBox.isSelected());
-            } 
+            if (! bStopControlEvents) {
+                if (objModel != null)  {
+                    objModel.setSomeBooleanField(SomeBooleanCheckBox.isSelected());
+                } 
+            }
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
