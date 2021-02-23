@@ -177,7 +177,7 @@ public class MainView
         ProgressBar.setPreferredSize(new java.awt.Dimension(150, 22));
 
         DirtyIconButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Save.png"))); // NOI18N
-        DirtyIconButton.setToolTipText("dirty");
+        DirtyIconButton.setToolTipText("not Dirty");
         DirtyIconButton.setEnabled(false);
         DirtyIconButton.setMaximumSize(new java.awt.Dimension(22, 22));
         DirtyIconButton.setMinimumSize(new java.awt.Dimension(22, 22));
@@ -884,6 +884,12 @@ public class MainView
             case "Dirty":
                 {
                     this.DirtyIconButton.setVisible(objModel.isDirty()); //use wrapper sub in viewmodel
+                    this.DirtyIconButton.setEnabled(objModel.isDirty()); 
+                    if (objModel.isDirty()) { 
+                        this.DirtyIconButton.setToolTipText("Dirty"); 
+                    } else { 
+                        this.DirtyIconButton.setToolTipText("not Dirty");
+                    }
 
                     System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
                     break;
@@ -2305,6 +2311,8 @@ public class MainView
             System.out.println("formWindowOpened begin");
             objModel = new MvcModel();
             objModel.addPropertyChangeListener(this);
+            objModel.setKey(objModel.KEY_NEW);
+            
             System.out.println("formWindowOpened end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
