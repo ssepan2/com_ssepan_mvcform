@@ -12,6 +12,7 @@ import java.beans.*;
 import java.util.logging.Level;
 //import javax.swing.WindowConstants;
 //import javax.swing.*;
+import javax.swing.JOptionPane;    // Needed for Dialog Box
 /**
  *
  * @author ssepan
@@ -29,7 +30,7 @@ public class MainView
 
     
     //Because MainView contains the entry point, it will contains the return code definitions and call System.exit()
-    public static Integer returnValue;
+    public static Integer returnCode;
     
     private MvcModel objModel ;
     private Boolean  bStopControlEvents=false;
@@ -45,7 +46,7 @@ public class MainView
         initComponents();
         
         try {
-            MainView.returnValue = RETURNCODE_INCOMPLETE;  //default to Incomplete code
+            MainView.returnCode = RETURNCODE_INCOMPLETE;  //default to Incomplete code
 
             Log.setPackageName("com.ssepan.mvcform");
             
@@ -846,7 +847,7 @@ public class MainView
         String propertyName="";
 
         try {
-            System.out.println(String.format("propertyChange %s '%s' '%s'",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
+            //System.out.println(String.format("propertyChange %s '%s' '%s'",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             //case statement handling individual properties, with flag to preventcontrols from firing back
             
             bStopControlEvents = true;
@@ -857,28 +858,28 @@ public class MainView
                     //update when Key directly edited or when new/open/save/saveas
                     this.setTitle(String.format(APP_TITLE_FORMAT,objModel.getKey()));
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
                     break;
                 }
             case "someStringField":
                 {
                     this.SomeStringTextField.setText(objModel.getSomeStringField());
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
                     break;
                 }
             case "someIntegerField":
                 {
                     this.SomeIntegerTextField.setText(Integer.toString(objModel.getSomeIntegerField()));
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
                     break;
                 }
             case "someBooleanField":
                 {
                     this.SomeBooleanCheckBox.setSelected(objModel.isSomeBooleanField());
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
                     break;
                 }
             case "Dirty":
@@ -891,7 +892,7 @@ public class MainView
                         this.DirtyIconButton.setToolTipText("not Dirty");
                     }
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
                     break;
                 }
             default:
@@ -910,6 +911,172 @@ public class MainView
         }
     }
 
+    private Boolean FileNew() {
+        String sErrorMessage="";
+        Boolean returnValue=false;
+
+        try {
+            if (objModel != null) {
+               objModel.removePropertyChangeListener(this);
+            };
+            objModel = new MvcModel();
+            objModel.addPropertyChangeListener(this);
+            //objModel.setKey(objModel.KEY_NEW);
+
+            //objModel.RefreshModel(false); //to update view
+            
+            returnValue=true;
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return returnValue;
+    }
+    
+    private Boolean FileOpen() {
+        String sErrorMessage="";
+        Boolean returnValue=false;
+
+        try {
+            //OPEN
+            //update properties from INI
+            if (!MvcModel.ReadIni(MvcModel.C_INI_FILE, objModel)) {
+              throw new Exception("open failed.");
+            };
+
+            //objModel.RefreshModel(false); //to update view
+            
+            returnValue=true;
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return returnValue;
+    }
+    
+    private Boolean FileSave(Boolean bSaveAs, StringBuilder sStatusMessageFromCaller) {
+        String sErrorMessage="";
+        String sResponse="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        Boolean returnValue=false;
+        Boolean bCancel=false;
+
+        try {
+            
+            //SAVE
+            //save properties to INI
+            if ((isNullOrWhitespace(objModel.getKey())) || (objModel.getKey() == MvcModel.KEY_NEW) || (bSaveAs)) {
+            
+            sResponse = JOptionPane.showInputDialog(this, "Please enter model name:", "Save...", JOptionPane.QUESTION_MESSAGE);
+            if ((isNullOrWhitespace(sResponse)) && (sResponse != MvcModel.KEY_NEW)) {
+              
+                 objModel.setKey(sResponse);
+              }
+               else {
+               
+                  bCancel=true;
+               };
+            };
+
+            if (bCancel) {
+            
+                //use this when passing string value back through param list
+                updatePassedStringBuilder(sStatusMessageFromCaller, "Save cancelled.");
+            }
+            else {
+            
+                if (!MvcModel.WriteIni(MvcModel.C_INI_FILE, objModel)) {
+                    throw new Exception("save failed.");
+                };
+                //use this when passing string value back through param list
+                updatePassedStringBuilder(sStatusMessageFromCaller, "Save done.");
+            };
+            
+            returnValue=true;
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return returnValue;
+    }
+    
+    private Boolean CheckForSaveOrCancel(StringBuilder sStatusMessageFromCaller) {
+        String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        Boolean returnValue=false;
+        Boolean isCancel=false;
+        Integer dialogResult=0;
+        try {
+            isCancel = false;
+
+            if (objModel!=null) {
+                if (objModel.isDirty()) {
+                    //prompt before saving
+                    dialogResult = JOptionPane.showConfirmDialog(this, String.format("Save changes?: '%s' ",objModel.getKey()), "Save As?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                    switch (dialogResult) {
+                         case 0://Yes
+                         {
+                            //Yes, SAVE
+                            if (FileSave(true, sStatusMessageFromCallee)) {
+                                isCancel = false;
+                            } else {
+                                isCancel = true;
+                               throw new Exception("save failed.");
+                            };
+                            //use this when passing string value back through param list
+                            updatePassedStringBuilder(sStatusMessageFromCaller,sStatusMessageFromCallee.toString());
+                            
+                            break;
+                         }
+                         case 1://No
+                         {
+                            //No, skip Save-or-cancel, do target action
+                            isCancel = false;
+                            break;
+                         }
+                         case 2://Cancel
+                         {
+                            //Cancel, skip Save and target action
+                            isCancel = true;
+                            break;
+                         }
+                         default:
+                            throw new Exception("unexpected response enum");
+                    }; //case
+                };
+            };
+            
+            returnValue=isCancel;
+        } catch (Exception ex) {
+            sErrorMessage=ex.getMessage();
+            ErrorMessage.setText(sErrorMessage);
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return returnValue;
+    }
+    
+    private StringBuilder updatePassedStringBuilder(StringBuilder oldStringBuilder, String newString) {
+        oldStringBuilder.delete(0, oldStringBuilder.length());
+        oldStringBuilder.append(newString);
+        
+        return oldStringBuilder;
+    }
+    
+    private Boolean isNullOrWhitespace(String sString) {
+        return ((sString != null) && (!sString.isEmpty()) && (!sString.trim().isEmpty()));
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="actions">
     private void delayFor(double dt) {
         String sStatusMessage="";
@@ -961,9 +1128,15 @@ public class MainView
     private void FileNewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileNewMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        Boolean bCancel=false;
         
         try {
-            //clear status, error messages at beginning of every action
+            //check for save or cancel
+            bCancel = CheckForSaveOrCancel(sStatusMessageFromCallee);
+            //System.out.println(bCancel);
+
+                        //clear status, error messages at beginning of every action
            sStatusMessage="New...";
            sErrorMessage="";
             
@@ -973,13 +1146,16 @@ public class MainView
             //perform sender disable in all actions
             FileNewMenuItem.setEnabled(false);
             FileNewButton.setEnabled(false);
-  
-            if (Something()) {
-               sStatusMessage = "New finished.";
-            }
-            else {
-               sStatusMessage = "New cancelled.";
-            }
+
+            if (bCancel) {
+                sStatusMessage = "New cancelled.";
+            } else {
+                //NEW
+               if (! FileNew()) {
+                  throw new Exception("new failed.");
+               };
+               sStatusMessage = "New done.";
+            };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1001,8 +1177,15 @@ public class MainView
     private void FileOpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOpenMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        String sResponse="";
+        Boolean bCancel=false;
+        Integer dialogResult=0;
        
         try {
+            bCancel = CheckForSaveOrCancel(sStatusMessageFromCallee);
+            //System.out.println(bCancel);
+  
             //clear status, error messages at beginning of every action
            sStatusMessage="Open...";
            sErrorMessage="";
@@ -1013,13 +1196,33 @@ public class MainView
             //perform sender disable in all actions
             FileOpenMenuItem.setEnabled(false);
             FileOpenButton.setEnabled(false);
-  
-            if (Something()) {
-               sStatusMessage = "Open finished.";
-            }
-            else {
-               sStatusMessage = "Open cancelled.";
-            }
+
+            if (bCancel) {
+                sStatusMessage = "Open cancelled during Save.";
+            } else {
+                sResponse = JOptionPane.showInputDialog(this, "Please enter model name:", "Open...", JOptionPane.QUESTION_MESSAGE);
+                if ((isNullOrWhitespace(sResponse)) && (sResponse != MvcModel.KEY_NEW)) {
+                   //TODO:implement VerifyKey
+                   //if (! objModel.VerifyKey(null, sResponse, "TODO:Path")) {
+                   //  FmtStr(formatResult,"ID not found in settings: Slot =''%s''", [sResponse]);
+                   //  raise Exception.Create(formatResult);
+                   //} else {
+                       objModel.setKey(sResponse);
+                   //};
+                } else {
+                    bCancel = true;
+                };
+
+                if (bCancel) {
+                    sStatusMessage = "Open cancelled during model name input.";
+                } else {
+                    //OPEN
+                   if (! FileOpen()) {
+                      throw new Exception("open failed.");
+                   };
+                   sStatusMessage = sStatusMessageFromCallee.toString() + "; Open done.";//in rare cases, we will want to get a message from the check
+               };
+            };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1041,10 +1244,11 @@ public class MainView
     private void FileSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
         
         try {
             //clear status, error messages at beginning of every action
-           sStatusMessage="Save...";
+           sStatusMessage="Saving...";
            sErrorMessage="";
             
             //use progress bar (marquee) with action icon (where available) in status bar
@@ -1054,12 +1258,11 @@ public class MainView
             FileSaveMenuItem.setEnabled(false);
             FileSaveButton.setEnabled(false);
   
-            if (Something()) {
-               sStatusMessage = "Save finished.";
-            }
-            else {
-               sStatusMessage = "Save cancelled.";
-            }
+            //SAVE
+            //save properties to INI
+            if (! FileSave(false, sStatusMessageFromCallee)) {
+              throw new Exception("Save failed.");
+            };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1081,6 +1284,7 @@ public class MainView
     private void FileSaveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveAsMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
         
         try {
             //clear status, error messages at beginning of every action
@@ -1093,12 +1297,11 @@ public class MainView
             //perform sender disable in all actions
             FileSaveAsMenuItem.setEnabled(false);
   
-            if (Something()) {
-               sStatusMessage = "Save As finished.";
-            }
-            else {
-               sStatusMessage = "Save As cancelled.";
-            }
+            //SAVE
+            //save properties to INI
+             if (! FileSave(true, sStatusMessageFromCallee)) {
+                throw new Exception("Save As failed.");
+             };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1197,8 +1400,12 @@ public class MainView
     private void FileExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileExitMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        Boolean bCancel=false;
         
         try {
+            bCancel = CheckForSaveOrCancel(sStatusMessageFromCallee);
+
             //clear status, error messages at beginning of every action
            sStatusMessage="Exit...";
            sErrorMessage="";
@@ -1208,15 +1415,14 @@ public class MainView
             
             //perform sender disable in all actions
             FileExitMenuItem.setEnabled(false);
-  
-            //initiate close of window/frame, in a way that allows the WindowsClosing and WindowCLosed events to do their jobs
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-//            if (Something()) {
-//               sStatusMessage = "Exit finished.";//boilerplate, may not be applicable here
-//            }
-//            else {
-//               sStatusMessage = "Exit cancelled.";
-//            }
+            
+            if (bCancel) {
+                sStatusMessage = "Exit cancelled.";
+            } else {
+                //EXIT
+                //initiate close of window/frame, in a way that allows the WindowsClosing and WindowCLosed events to do their jobs
+                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -2247,8 +2453,8 @@ public class MainView
         String sStatusMessage="";
         String sErrorMessage="";
         try {
-            System.out.println("SomeStringTextFieldKeyReleased");
             if (! bStopControlEvents) {
+                //System.out.println("SomeStringTextFieldKeyReleased");
                 if (objModel != null)  {
                     objModel.setSomeStringField(SomeStringTextField.getText());
                 } 
@@ -2268,7 +2474,7 @@ public class MainView
         String sErrorMessage="";
         try {
             if (! bStopControlEvents) {
-                System.out.println("SomeIntegerTextFieldKeyReleased");
+                //System.out.println("SomeIntegerTextFieldKeyReleased");
                 if (objModel != null)  {
                     objModel.setSomeIntegerField(Integer.parseInt(SomeIntegerTextField.getText()));
                 } 
@@ -2287,8 +2493,8 @@ public class MainView
         String sStatusMessage="";
         String sErrorMessage="";
         try {
-            System.out.println("SomeBooleanCheckBoxItemStateChanged");
             if (! bStopControlEvents) {
+                //System.out.println("SomeBooleanCheckBoxItemStateChanged");
                 if (objModel != null)  {
                     objModel.setSomeBooleanField(SomeBooleanCheckBox.isSelected());
                 } 
@@ -2308,19 +2514,19 @@ public class MainView
         String sErrorMessage="";
 
         try {
-            System.out.println("formWindowOpened begin");
-            objModel = new MvcModel();
-            objModel.addPropertyChangeListener(this);
-            objModel.setKey(objModel.KEY_NEW);
+            //System.out.println("formWindowOpened begin");
             
-            System.out.println("formWindowOpened end");
+            if (! FileNew()) {
+               throw new Exception("new failed.");
+            }
+            
+            //System.out.println("formWindowOpened end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
             Log.write(ex,Level.ALL);
         } finally {
             //always do this
-
         }
     }                                                                  
 
@@ -2330,8 +2536,8 @@ public class MainView
         String sErrorMessage="";
 
         try {
-            MainView.returnValue = RETURNCODE_COMPLETE;  //return Complete code
-            System.exit(returnValue);
+            MainView.returnCode = RETURNCODE_COMPLETE;  //return Complete code
+            System.exit(returnCode);
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
@@ -2347,10 +2553,12 @@ public class MainView
         String sErrorMessage="";
 
         try {
-            System.out.println("formWindowClosing begin");
+            //System.out.println("formWindowClosing begin");
+            
             objModel.removePropertyChangeListener(this);
             objModel = null;
-            System.out.println("formWindowClosing end");
+            
+            //System.out.println("formWindowClosing end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
