@@ -46,13 +46,15 @@ public class MainView
         initComponents();
         
         try {
+            System.out.println("MainView begin");
             MainView.returnCode = RETURNCODE_INCOMPLETE;  //default to Incomplete code
 
             Log.setPackageName("com.ssepan.mvcform");
             
             //this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
             
-
+           
+            System.out.println("MainView end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
@@ -858,28 +860,28 @@ public class MainView
                     //update when Key directly edited or when new/open/save/saveas
                     this.setTitle(String.format(APP_TITLE_FORMAT,objModel.getKey()));
 
-                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
                     break;
                 }
             case "someStringField":
                 {
                     this.SomeStringTextField.setText(objModel.getSomeStringField());
 
-                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
                     break;
                 }
             case "someIntegerField":
                 {
                     this.SomeIntegerTextField.setText(Integer.toString(objModel.getSomeIntegerField()));
 
-                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
                     break;
                 }
             case "someBooleanField":
                 {
                     this.SomeBooleanCheckBox.setSelected(objModel.isSomeBooleanField());
 
-                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
                     break;
                 }
             case "Dirty":
@@ -892,7 +894,7 @@ public class MainView
                         this.DirtyIconButton.setToolTipText("not Dirty");
                     }
 
-                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
+                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
                     break;
                 }
             default:
@@ -916,14 +918,16 @@ public class MainView
         Boolean returnValue=false;
 
         try {
+            System.out.println("FileNew begin");
             if (objModel != null) {
                objModel.removePropertyChangeListener(this);
             };
             objModel = new MvcModel();
             objModel.addPropertyChangeListener(this);
-            //objModel.setKey(objModel.KEY_NEW);
+            objModel.setKey(objModel.KEY_NEW);
 
-            //objModel.RefreshModel(false); //to update view
+            objModel.refreshModel(false); //to update view
+            System.out.println("FileNew end");
             
             returnValue=true;
         } catch (Exception ex) {
@@ -1077,7 +1081,6 @@ public class MainView
         return ((sString != null) && (!sString.isEmpty()) && (!sString.trim().isEmpty()));
     }
     
-    // <editor-fold defaultstate="collapsed" desc="actions">
     private void delayFor(double dt) {
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1124,6 +1127,8 @@ public class MainView
         }
         return returnValue;
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="actions">
     
     private void FileNewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileNewMenuItemActionPerformed
         String sStatusMessage="";
@@ -2514,13 +2519,13 @@ public class MainView
         String sErrorMessage="";
 
         try {
-            //System.out.println("formWindowOpened begin");
-            
+            System.out.println("formWindowOpened begin");
+
             if (! FileNew()) {
                throw new Exception("new failed.");
             }
             
-            //System.out.println("formWindowOpened end");
+            System.out.println("formWindowOpened end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);
