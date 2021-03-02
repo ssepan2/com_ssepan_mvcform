@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;    // Needed for Dialog Box
  */
 public class MainView
     extends javax.swing.JFrame
-    implements PropertyChangeListener
+    implements IPropertyChanged
 {
     
     // <editor-fold defaultstate="collapsed" desc="Declarations">
@@ -843,17 +843,20 @@ public class MainView
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void propertyChange(PropertyChangeEvent e)  {
+//    @Override
+//    public void PropertyChanged(String propertyName) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+
+    public void propertyChanged(String propertyName)  {
         String sStatusMessage="";
         String sErrorMessage="";
-        String propertyName="";
 
         try {
             //System.out.println(String.format("propertyChange %s '%s' '%s'",e.getPropertyName(), e.getOldValue(), e.getNewValue()));
             //case statement handling individual properties, with flag to preventcontrols from firing back
             
             bStopControlEvents = true;
-            propertyName=e.getPropertyName();
             switch(propertyName) {
             case "Key":
                 {
@@ -920,11 +923,12 @@ public class MainView
         try {
             System.out.println("FileNew begin");
             if (objModel != null) {
-               objModel.removePropertyChangeListener(this);
+               objModel.removeHandler(this);
             };
+            objModel=null;
+            
             objModel = new MvcModel();
-            objModel.addPropertyChangeListener(this);
-            objModel.setKey(objModel.KEY_NEW);
+            objModel.addHandler(this);
 
             objModel.refreshModel(false); //to update view
             System.out.println("FileNew end");
@@ -945,13 +949,15 @@ public class MainView
         Boolean returnValue=false;
 
         try {
+            System.out.println("FileOpen begin");
             //OPEN
             //update properties from INI
             if (!MvcModel.ReadIni(MvcModel.C_INI_FILE, objModel)) {
               throw new Exception("open failed.");
             };
 
-            //objModel.RefreshModel(false); //to update view
+            objModel.refreshModel(false); //to update view
+            System.out.println("FileOpen end");
             
             returnValue=true;
         } catch (Exception ex) {
@@ -972,6 +978,7 @@ public class MainView
         Boolean bCancel=false;
 
         try {
+            System.out.println("FileSave begin");
             
             //SAVE
             //save properties to INI
@@ -983,24 +990,22 @@ public class MainView
                  objModel.setKey(sResponse);
               }
                else {
-               
                   bCancel=true;
                };
             };
 
             if (bCancel) {
-            
                 //use this when passing string value back through param list
                 updatePassedStringBuilder(sStatusMessageFromCaller, "Save cancelled.");
             }
             else {
-            
                 if (!MvcModel.WriteIni(MvcModel.C_INI_FILE, objModel)) {
                     throw new Exception("save failed.");
                 };
                 //use this when passing string value back through param list
                 updatePassedStringBuilder(sStatusMessageFromCaller, "Save done.");
             };
+            System.out.println("FileSave end");
             
             returnValue=true;
         } catch (Exception ex) {
@@ -1179,6 +1184,8 @@ public class MainView
         }
     }//GEN-LAST:event_FileNewMenuItemActionPerformed
 
+    //NOTE:open checks/prompts/save correctly, and clear dirty flag (unlike direct save)
+    //NOTE:cancel from saveas when dirty DOES re-enable action: OK; why diffrent from fileexit?
     private void FileOpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOpenMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1246,6 +1253,8 @@ public class MainView
         }
     }//GEN-LAST:event_FileOpenMenuItemActionPerformed
 
+    //NOTE:save prompts (saveas) for filename when key NOT set ('new'):OK
+    //DEBUG:save does not complete and clear Save status message (Saving...)
     private void FileSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1286,6 +1295,10 @@ public class MainView
         }
     }//GEN-LAST:event_FileSaveMenuItemActionPerformed
 
+    //DEBUG:save prompts for filename with blank when key already set
+    //NOTE:saveas prompts (saveas) for filename when key NOT set ('new'):OK
+    //DEBUG:saveas does not clear dirty
+    //DEBUG:saveas does not complete and clear SaveAs status message (Save As...)
     private void FileSaveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveAsMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1439,8 +1452,7 @@ public class MainView
             //always do something
 
             //perform sender enable in all actions
-            FileNewButton.setEnabled(true);
-
+            FileExitMenuItem.setEnabled(true);
             ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileExitMenuItemActionPerformed
@@ -2556,12 +2568,23 @@ public class MainView
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         String sStatusMessage="";
         String sErrorMessage="";
+        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        Boolean bCancel=false;
+        IPropertyChanged delegateInterface;
 
         try {
             //System.out.println("formWindowClosing begin");
+            bCancel = CheckForSaveOrCancel(sStatusMessageFromCallee);
             
-            objModel.removePropertyChangeListener(this);
+            objModel.removeHandler(this);
             objModel = null;
+            
+            if (bCancel) {
+                //TODO:sStatusMessage = "Exit cancelled.";
+                //TODO:need to channge default action for close to do nothing, and use dispose() (?) to explicitly close window
+            } else {
+                //fall through and close
+            };
             
             //System.out.println("formWindowClosing end");
         } catch (Exception ex) {
