@@ -955,6 +955,7 @@ public class MainView
             if (!MvcModel.ReadIni(MvcModel.C_INI_FILE, objModel)) {
               throw new Exception("open failed.");
             };
+            
 
             objModel.refreshModel(false); //to update view
             System.out.println("FileOpen end");
@@ -1085,7 +1086,6 @@ public class MainView
         return oldStringBuilder;
     }
     
-    //DEBUG:does not trap Empty string
     private Boolean isNullOrWhitespace(String sString) {
         return ((sString == null) || (sString.isEmpty()) || (sString.trim().isEmpty()));
     }
@@ -1188,7 +1188,6 @@ public class MainView
         }
     }//GEN-LAST:event_FileNewMenuItemActionPerformed
 
-    //DEBUG:open checks/prompts/save correctly, and during save, yes or no continues to open, and clears dirty flag but does not refresh UI
     private void FileOpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOpenMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1228,15 +1227,15 @@ public class MainView
                     throw new Exception("invalid Key entered.");//bCancel=true;
                 };
 
-                if (bCancel) {
-                    sStatusMessage = "Open cancelled during model name input.";
-                } else {
+//                if (bCancel) {
+//                    sStatusMessage = "Open cancelled during model name input.";
+//                } else {
                     //OPEN
                    if (! FileOpen()) {
                       throw new Exception("open failed.");
                    };
                    sStatusMessage = sStatusMessageFromCallee.toString() + "; Open done.";//in rare cases, we will want to get a message from the check
-               };
+//               };
             };
         }
         catch (Exception ex) {
