@@ -973,25 +973,24 @@ public class MainView
     private Boolean FileSave(Boolean bSaveAs, StringBuilder sStatusMessageFromCaller) {
         String sErrorMessage="";
         String sResponse="";
-        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        StringBuilder sStatusMessageFromCallee;
         Boolean returnValue=false;
         Boolean bCancel=false;
 
         try {
             System.out.println("FileSave begin");
+            sStatusMessageFromCallee=new StringBuilder("");
             
             //SAVE
             //save properties to INI
-            if ((isNullOrWhitespace(objModel.getKey())) || (objModel.getKey() == MvcModel.KEY_NEW) || (bSaveAs)) {
-            
-            sResponse = JOptionPane.showInputDialog(this, "Please enter model name:", "Save...", JOptionPane.QUESTION_MESSAGE);
-            if ((isNullOrWhitespace(sResponse)) && (sResponse != MvcModel.KEY_NEW)) {
-              
-                 objModel.setKey(sResponse);
-              }
-               else {
-                  bCancel=true;
-               };
+            //NOTE: objModel.getKey() == MvcModel.KEY_NEW fails evens when both contain "(new)"
+            if ((isNullOrWhitespace(objModel.getKey())) || (objModel.getKey().equals(MvcModel.KEY_NEW)) || (bSaveAs)) {
+                sResponse = (String)JOptionPane.showInputDialog(this, "Please enter model name:", "Save...", JOptionPane.QUESTION_MESSAGE, null,null,""+objModel.getKey());
+                if ((!isNullOrWhitespace(sResponse)) && (!sResponse.equals(MvcModel.KEY_NEW))) {
+                    objModel.setKey(sResponse);
+                } else {
+                    throw new Exception("invalid Key entered.");//bCancel=true;
+                };
             };
 
             if (bCancel) {
@@ -1005,6 +1004,9 @@ public class MainView
                 //use this when passing string value back through param list
                 updatePassedStringBuilder(sStatusMessageFromCaller, "Save done.");
             };
+            
+            objModel.setDirty(false);
+            
             System.out.println("FileSave end");
             
             returnValue=true;
@@ -1020,12 +1022,13 @@ public class MainView
     
     private Boolean CheckForSaveOrCancel(StringBuilder sStatusMessageFromCaller) {
         String sErrorMessage="";
-        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
+        StringBuilder sStatusMessageFromCallee=null;
         Boolean returnValue=false;
         Boolean isCancel=false;
         Integer dialogResult=0;
         try {
             isCancel = false;
+            sStatusMessageFromCallee=new StringBuilder("");
 
             if (objModel!=null) {
                 if (objModel.isDirty()) {
@@ -1082,8 +1085,9 @@ public class MainView
         return oldStringBuilder;
     }
     
+    //DEBUG:does not trap Empty string
     private Boolean isNullOrWhitespace(String sString) {
-        return ((sString != null) && (!sString.isEmpty()) && (!sString.trim().isEmpty()));
+        return ((sString == null) || (sString.isEmpty()) || (sString.trim().isEmpty()));
     }
     
     private void delayFor(double dt) {
@@ -1184,8 +1188,7 @@ public class MainView
         }
     }//GEN-LAST:event_FileNewMenuItemActionPerformed
 
-    //NOTE:open checks/prompts/save correctly, and clear dirty flag (unlike direct save)
-    //NOTE:cancel from saveas when dirty DOES re-enable action: OK; why diffrent from fileexit?
+    //DEBUG:open checks/prompts/save correctly, and during save, yes or no continues to open, and clears dirty flag but does not refresh UI
     private void FileOpenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOpenMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1213,7 +1216,7 @@ public class MainView
                 sStatusMessage = "Open cancelled during Save.";
             } else {
                 sResponse = JOptionPane.showInputDialog(this, "Please enter model name:", "Open...", JOptionPane.QUESTION_MESSAGE);
-                if ((isNullOrWhitespace(sResponse)) && (sResponse != MvcModel.KEY_NEW)) {
+                if ((!isNullOrWhitespace(sResponse)) && (!sResponse.equals(MvcModel.KEY_NEW))) {
                    //TODO:implement VerifyKey
                    //if (! objModel.VerifyKey(null, sResponse, "TODO:Path")) {
                    //  FmtStr(formatResult,"ID not found in settings: Slot =''%s''", [sResponse]);
@@ -1222,7 +1225,7 @@ public class MainView
                        objModel.setKey(sResponse);
                    //};
                 } else {
-                    bCancel = true;
+                    throw new Exception("invalid Key entered.");//bCancel=true;
                 };
 
                 if (bCancel) {
@@ -1253,8 +1256,6 @@ public class MainView
         }
     }//GEN-LAST:event_FileOpenMenuItemActionPerformed
 
-    //NOTE:save prompts (saveas) for filename when key NOT set ('new'):OK
-    //DEBUG:save does not complete and clear Save status message (Saving...)
     private void FileSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1275,8 +1276,10 @@ public class MainView
             //SAVE
             //save properties to INI
             if (! FileSave(false, sStatusMessageFromCallee)) {
-              throw new Exception("Save failed.");
-            };
+                sStatusMessage = sStatusMessageFromCallee.toString() + "; Save not done.";
+            } else {
+                sStatusMessage = "Save done.";
+            }
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1295,10 +1298,6 @@ public class MainView
         }
     }//GEN-LAST:event_FileSaveMenuItemActionPerformed
 
-    //DEBUG:save prompts for filename with blank when key already set
-    //NOTE:saveas prompts (saveas) for filename when key NOT set ('new'):OK
-    //DEBUG:saveas does not clear dirty
-    //DEBUG:saveas does not complete and clear SaveAs status message (Save As...)
     private void FileSaveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveAsMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
@@ -1306,7 +1305,7 @@ public class MainView
         
         try {
             //clear status, error messages at beginning of every action
-           sStatusMessage="Save As...";
+           sStatusMessage="Saving As...";
            sErrorMessage="";
             
             //use progress bar (marquee) with action icon (where available) in status bar
@@ -1317,9 +1316,11 @@ public class MainView
   
             //SAVE
             //save properties to INI
-             if (! FileSave(true, sStatusMessageFromCallee)) {
-                throw new Exception("Save As failed.");
-             };
+            if (! FileSave(true, sStatusMessageFromCallee)) {
+                sStatusMessage = sStatusMessageFromCallee.toString() + "; Save As not done.";
+            } else {
+                sStatusMessage = "Save As done.";
+            }
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1418,29 +1419,12 @@ public class MainView
     private void FileExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileExitMenuItemActionPerformed
         String sStatusMessage="";
         String sErrorMessage="";
-        StringBuilder sStatusMessageFromCallee=new StringBuilder("");
-        Boolean bCancel=false;
         
         try {
-            bCancel = CheckForSaveOrCancel(sStatusMessageFromCallee);
-
-            //clear status, error messages at beginning of every action
-           sStatusMessage="Exit...";
-           sErrorMessage="";
-            
-            //use progress bar (marquee) with action icon (where available) in status bar
-            ViewModelBase.StartProgressBar(sStatusMessage,sErrorMessage, true,false,0, 100,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar,FileExitMenuItem.getIcon());
-            
-            //perform sender disable in all actions
-            FileExitMenuItem.setEnabled(false);
-            
-            if (bCancel) {
-                sStatusMessage = "Exit cancelled.";
-            } else {
+                //NOTE: save check is now handled in form_closing event, and covers both FileExit and clicking Close button
                 //EXIT
                 //initiate close of window/frame, in a way that allows the WindowsClosing and WindowCLosed events to do their jobs
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            };
         }
         catch (Exception ex) {
             sErrorMessage=ex.getMessage();
@@ -1451,9 +1435,9 @@ public class MainView
         finally {
             //always do something
 
-            //perform sender enable in all actions
-            FileExitMenuItem.setEnabled(true);
-            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
+//            //perform sender enable in all actions
+//            FileExitMenuItem.setEnabled(true);
+//            ViewModelBase.StopProgressBar(sStatusMessage, null,StatusMessage, ErrorMessage,ProgressBar,ActionIconButton, StatusBar);
         }
     }//GEN-LAST:event_FileExitMenuItemActionPerformed
 
