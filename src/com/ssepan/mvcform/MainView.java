@@ -10,6 +10,7 @@ import java.beans.*;
 //import java.util.HashSet;
 //import java.util.Set;
 import java.util.logging.Level;
+import java.nio.file.*;//Path
 //import javax.swing.WindowConstants;
 //import javax.swing.*;
 import javax.swing.JOptionPane;    // Needed for Dialog Box
@@ -947,12 +948,18 @@ public class MainView
     private Boolean FileOpen() {
         String sErrorMessage="";
         Boolean returnValue=false;
+        String sFilePath="";
+        Path pPath;
 
         try {
             System.out.println("FileOpen begin");
             //OPEN
             //update properties from INI
-            if (!MvcModel.ReadIni(MvcModel.C_INI_FILE, objModel)) {
+            pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_JSON_FILE, objModel.getKey()));
+            sFilePath=pPath.toFile().getPath();
+            System.out.println(sFilePath);
+//            if (!MvcModel.ReadIni(sFilePath, objModel)) {
+            if (!MvcModel.ReadJson(sFilePath, objModel)) {
               throw new Exception("open failed.");
             };
             
@@ -974,13 +981,15 @@ public class MainView
     private Boolean FileSave(Boolean bSaveAs, StringBuilder sStatusMessageFromCaller) {
         String sErrorMessage="";
         String sResponse="";
-        StringBuilder sStatusMessageFromCallee;
+        //StringBuilder sStatusMessageFromCallee;
         Boolean returnValue=false;
         Boolean bCancel=false;
+        String sFilePath="";
+        Path pPath;
 
         try {
             System.out.println("FileSave begin");
-            sStatusMessageFromCallee=new StringBuilder("");
+            //sStatusMessageFromCallee=new StringBuilder("");
             
             //SAVE
             //save properties to INI
@@ -999,7 +1008,11 @@ public class MainView
                 updatePassedStringBuilder(sStatusMessageFromCaller, "Save cancelled.");
             }
             else {
-                if (!MvcModel.WriteIni(MvcModel.C_INI_FILE, objModel)) {
+                pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_JSON_FILE, objModel.getKey()));
+                sFilePath=pPath.toFile().getPath();
+                System.out.println(sFilePath);
+//                if (!MvcModel.WriteIni(sFilePath, objModel)) {
+                if (!MvcModel.WriteJson(sFilePath, objModel)) {
                     throw new Exception("save failed.");
                 };
                 //use this when passing string value back through param list
