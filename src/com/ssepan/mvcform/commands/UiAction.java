@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 //import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
-import static javax.swing.Action.*;
+//import static javax.swing.Action.*;
 import javax.swing.*;
 
 /**
  *
  * @author ssepan
  */
+@SuppressWarnings("serial")
 public class UiAction
     extends AbstractAction
 {

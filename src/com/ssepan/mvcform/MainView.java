@@ -6,6 +6,7 @@ import java.awt.event.*;
 import com.ssepan.utility.*;
 import com.ssepan.application.mvvm.*;
 import com.ssepan.mvclibrary.*;
+import static com.ssepan.mvclibrary.MvcModel.IO_FORMAT;
 import java.beans.*;
 //import java.util.HashSet;
 //import java.util.Set;
@@ -864,28 +865,28 @@ public class MainView
                     //update when Key directly edited or when new/open/save/saveas
                     this.setTitle(String.format(APP_TITLE_FORMAT,objModel.getKey()));
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getKey()));
                     break;
                 }
             case "someStringField":
                 {
                     this.SomeStringTextField.setText(objModel.getSomeStringField());
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeStringField()));
                     break;
                 }
             case "someIntegerField":
                 {
                     this.SomeIntegerTextField.setText(Integer.toString(objModel.getSomeIntegerField()));
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.getSomeIntegerField().toString()));
                     break;
                 }
             case "someBooleanField":
                 {
                     this.SomeBooleanCheckBox.setSelected(objModel.isSomeBooleanField());
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isSomeBooleanField().toString()));
                     break;
                 }
             case "Dirty":
@@ -898,7 +899,7 @@ public class MainView
                         this.DirtyIconButton.setToolTipText("not Dirty");
                     }
 
-                    System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
+                    //System.out.println(String.format("handled event: '%s' = '%s' ",propertyName,objModel.isDirty().toString()));
                     break;
                 }
             default:
@@ -954,15 +955,13 @@ public class MainView
         try {
             System.out.println("FileOpen begin");
             //OPEN
-            //update properties from INI
-            pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_JSON_FILE, objModel.getKey()));
-            sFilePath=pPath.toFile().getPath();
+            sFilePath=getFilePath();
             System.out.println(sFilePath);
-//            if (!MvcModel.ReadIni(sFilePath, objModel)) {
-            if (!MvcModel.ReadJson(sFilePath, objModel)) {
-              throw new Exception("open failed.");
+            objModel = readFile(sFilePath, objModel);
+            if (objModel == null) {
+                FileNew();
+                throw new Exception("open failed.");
             };
-            
 
             objModel.refreshModel(false); //to update view
             System.out.println("FileOpen end");
@@ -992,7 +991,6 @@ public class MainView
             //sStatusMessageFromCallee=new StringBuilder("");
             
             //SAVE
-            //save properties to INI
             //NOTE: objModel.getKey() == MvcModel.KEY_NEW fails evens when both contain "(new)"
             if ((isNullOrWhitespace(objModel.getKey())) || (objModel.getKey().equals(MvcModel.KEY_NEW)) || (bSaveAs)) {
                 sResponse = (String)JOptionPane.showInputDialog(this, "Please enter model name:", "Save...", JOptionPane.QUESTION_MESSAGE, null,null,""+objModel.getKey());
@@ -1008,11 +1006,9 @@ public class MainView
                 updatePassedStringBuilder(sStatusMessageFromCaller, "Save cancelled.");
             }
             else {
-                pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_JSON_FILE, objModel.getKey()));
-                sFilePath=pPath.toFile().getPath();
+                sFilePath=getFilePath();
                 System.out.println(sFilePath);
-//                if (!MvcModel.WriteIni(sFilePath, objModel)) {
-                if (!MvcModel.WriteJson(sFilePath, objModel)) {
+                if (!writeFile(sFilePath, objModel)) {
                     throw new Exception("save failed.");
                 };
                 //use this when passing string value back through param list
@@ -1032,6 +1028,122 @@ public class MainView
             //always do this
         }
         return returnValue;
+    }
+    
+    //isolate this decision-making from FileOpen
+    private MvcModel readFile(
+        String filepath,
+        MvcModel model
+    ) {
+        try {
+            switch (IO_FORMAT) {
+                case MvcModel.C_XML_IO: {
+                    model = (MvcModel)MvcModel.ReadXml(filepath, model);
+
+                    break;
+                }
+                case MvcModel.C_JSON_IO: {
+                    model = MvcModel.ReadJson(filepath, model);
+
+                    break;
+                }
+                case MvcModel.C_INI_IO: {
+                    model = MvcModel.ReadIni(filepath, model);
+
+                    break;
+                }
+                default: {
+                    throw new Exception("invalid enum IO format");
+                }
+            }
+            if (model == null) {
+              throw new Exception("open failed.");
+            };
+        } catch (Exception ex) {
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return model;
+    }
+    
+    //isolate this decision-making from FileSave
+    private Boolean writeFile(
+        String filepath,
+        MvcModel model
+    ) {
+        Boolean returnValue=false;
+        try {
+            switch (IO_FORMAT) {
+                case MvcModel.C_XML_IO: {
+                    if (!MvcModel.WriteXml(filepath, model)) {
+                        throw new Exception("save failed.");
+                    };
+
+                    break;
+                }
+                case MvcModel.C_JSON_IO: {
+                    if (!MvcModel.WriteJson(filepath, model)) {
+                        throw new Exception("save failed.");
+                    };
+
+                    break;
+                }
+                case MvcModel.C_INI_IO: {
+                    if (!MvcModel.WriteIni(filepath, model)) {
+                        throw new Exception("save failed.");
+                    };
+
+                    break;
+                }
+                default: {
+                    throw new Exception("invalid enum IO format");
+                }
+                
+            }
+
+            returnValue = true;
+        } catch (Exception ex) {
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return returnValue;
+    }
+    
+    //isolate this decision-making from FileOpen, FileSave
+    private String getFilePath() {
+        String sFilePath="";
+        Path pPath;
+        try {
+            switch (IO_FORMAT) {
+                case MvcModel.C_XML_IO: {
+                    pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_XML_FILE, objModel.getKey()));
+
+                    break;
+                }
+                case MvcModel.C_JSON_IO: {
+                    pPath = Paths.get(System.getProperty("user.home"), String.format(MvcModel.C_JSON_FILE, objModel.getKey()));
+
+                    break;
+                }
+                case MvcModel.C_INI_IO: {
+                    pPath = Paths.get(System.getProperty("user.home"), MvcModel.C_INI_FILE);
+
+                    break;
+                }
+                default: {
+                    throw new Exception("invalid enum IO format");
+                }
+            }
+            sFilePath=pPath.toFile().getPath();
+            return sFilePath;
+        } catch (Exception ex) {
+            Log.write(ex,Level.ALL);
+        } finally {
+            //always do this
+        }
+        return "";
     }
     
     private Boolean CheckForSaveOrCancel(StringBuilder sStatusMessageFromCaller) {
@@ -2527,13 +2639,13 @@ public class MainView
         String sErrorMessage="";
 
         try {
-            System.out.println("formWindowOpened begin");
+            //System.out.println("formWindowOpened begin");
 
             if (! FileNew()) {
                throw new Exception("new failed.");
             }
             
-            System.out.println("formWindowOpened end");
+            //System.out.println("formWindowOpened end");
         } catch (Exception ex) {
             sErrorMessage=ex.getMessage();
             ErrorMessage.setText(sErrorMessage);

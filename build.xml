@@ -10,6 +10,20 @@
 <project name="Com.Ssepan.MvcForm" default="default" basedir=".">
     <description>Builds, tests, and runs the project Com.Ssepan.MvcForm.</description>
     <import file="nbproject/build-impl.xml"/>
+	<!--Copy over any "dependant libraries' dependant libraries" -->
+	<target name="-post-jar">
+		<echo>Copying over extra jars (Ini4j, simple.json) into Com.Ssepan.MvcForm</echo>
+		<copy todir="./dist/lib">
+			<!-- put in order from least important to most important to prevent file overwrites -->
+			<fileset dir="../Com.Ssepan.MvcLibrary/dist/lib"></fileset>
+			<!--<fileset dir="../Com.Ssepan.MvcLibrary/dist/lib" file="_ini4j-0.5.1.jar"></fileset>
+			<fileset dir="../Com.Ssepan.MvcLibrary/dist/lib" file="org-netbeans-libs-ini4j.jar"></fileset>
+			<fileset dir="../Com.Ssepan.MvcLibrary/dist/lib" file="json-simple-1.1.1.jar"></fileset>
+			<fileset dir="../Com.Ssepan.MvcLibrary/dist/lib" file="org-netbeans-libs-json_simple.jar"></fileset>-->
+		</copy>
+		<echo>Copied over extra jars (Ini4j, simple.json) into Com.Ssepan.MvcForm</echo>
+	</target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 

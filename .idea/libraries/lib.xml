@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/lib/Com.Ssepan.MvcLibrary.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/Com.Ssepan.Utility.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/Com.Ssepan.Application.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
