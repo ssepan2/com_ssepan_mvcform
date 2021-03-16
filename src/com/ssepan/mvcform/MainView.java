@@ -453,9 +453,10 @@ public class MainView
         FileMenu.setMnemonic('F');
         FileMenu.setText("File");
 
-        FileNewMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/New.png"))); // NOI18N
         FileNewMenuItem.setMnemonic('N');
         FileNewMenuItem.setText("New");
+        FileNewMenuItem.setSelected(true);
+        FileNewMenuItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/About.png"))); // NOI18N
         FileNewMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FileNewMenuItemActionPerformed(evt);
@@ -485,7 +486,6 @@ public class MainView
         });
         FileMenu.add(FileSaveMenuItem);
 
-        FileSaveAsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         FileSaveAsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/SaveAs.png"))); // NOI18N
         FileSaveAsMenuItem.setMnemonic('A');
         FileSaveAsMenuItem.setText("Save As ...");
@@ -536,6 +536,7 @@ public class MainView
 
         EditUndoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
         EditUndoMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Undo.png"))); // NOI18N
+        EditUndoMenuItem.setMnemonic('U');
         EditUndoMenuItem.setText("Undo");
         EditUndoMenuItem.setName("EditUndoMenuItem"); // NOI18N
         EditUndoMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -547,6 +548,7 @@ public class MainView
 
         EditRedoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
         EditRedoMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Redo.png"))); // NOI18N
+        EditRedoMenuItem.setMnemonic('R');
         EditRedoMenuItem.setText("Redo");
         EditRedoMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -557,6 +559,7 @@ public class MainView
         EditMenu.add(jSeparator5);
 
         EditSelectAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        EditSelectAllMenuItem.setMnemonic('A');
         EditSelectAllMenuItem.setText("Select All");
         EditSelectAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -567,6 +570,7 @@ public class MainView
 
         EditCutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         EditCutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Cut.png"))); // NOI18N
+        EditCutMenuItem.setMnemonic('t');
         EditCutMenuItem.setText("Cut");
         EditCutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -577,6 +581,7 @@ public class MainView
 
         EditCopyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         EditCopyMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Copy.png"))); // NOI18N
+        EditCopyMenuItem.setMnemonic('C');
         EditCopyMenuItem.setText("Copy");
         EditCopyMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -587,6 +592,7 @@ public class MainView
 
         EditPasteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
         EditPasteMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Paste.png"))); // NOI18N
+        EditPasteMenuItem.setMnemonic('P');
         EditPasteMenuItem.setText("Paste");
         EditPasteMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -595,6 +601,7 @@ public class MainView
         });
         EditMenu.add(EditPasteMenuItem);
 
+        EditPasteSpecialMenuItem.setMnemonic('S');
         EditPasteSpecialMenuItem.setText("Paste Special...");
         EditPasteSpecialMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -605,6 +612,7 @@ public class MainView
 
         EditDeleteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
         EditDeleteMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Delete.png"))); // NOI18N
+        EditDeleteMenuItem.setMnemonic('D');
         EditDeleteMenuItem.setText("Delete");
         EditDeleteMenuItem.setToolTipText("");
         EditDeleteMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -617,6 +625,7 @@ public class MainView
 
         EditFindMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         EditFindMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Find.png"))); // NOI18N
+        EditFindMenuItem.setMnemonic('i');
         EditFindMenuItem.setText("Find...");
         EditFindMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -627,6 +636,7 @@ public class MainView
 
         EditReplaceMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         EditReplaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Replace.png"))); // NOI18N
+        EditReplaceMenuItem.setMnemonic('e');
         EditReplaceMenuItem.setText("Replace...");
         EditReplaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -635,6 +645,7 @@ public class MainView
         });
         EditMenu.add(EditReplaceMenuItem);
 
+        EditGoToMenuItem.setMnemonic('G');
         EditGoToMenuItem.setText("Go To...");
         EditGoToMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -646,6 +657,7 @@ public class MainView
 
         EditRefreshMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         EditRefreshMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Refresh.png"))); // NOI18N
+        EditRefreshMenuItem.setMnemonic('e');
         EditRefreshMenuItem.setText("Refresh");
         EditRefreshMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -656,6 +668,7 @@ public class MainView
         EditMenu.add(jSeparator3);
 
         EditPreferencesMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ssepan/mvcform/images/Preferences.png"))); // NOI18N
+        EditPreferencesMenuItem.setMnemonic('n');
         EditPreferencesMenuItem.setText("Preferences...");
         EditPreferencesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -951,16 +964,37 @@ public class MainView
         Boolean returnValue=false;
         String sFilePath="";
         Path pPath;
+//        proc:  TProcArgString;//use 'this'
+        MvcModel objNewModel;
 
         try {
             System.out.println("FileOpen begin");
             //OPEN
             sFilePath=getFilePath();
             System.out.println(sFilePath);
-            objModel = readFile(sFilePath, objModel);
-            if (objModel == null) {
+            objNewModel = readFile(sFilePath, objModel);
+            if (objNewModel == null) {
                 FileNew();
                 throw new Exception("open failed.");
+            } else {
+                //TODO:commit to new instance of model
+                //NOTE: don't strictly need to detach/re-attach handlers for INI I/O (as model is re-used)
+                // but JSON, XML I/O de-serialization will result in a new instance.
+                
+                //remove handler from old model
+                if (objModel != null) {
+                    objModel.removeHandler(this);
+                    objModel=null;
+                };
+                
+                objModel = objNewModel;
+                //add handler to new model
+                objModel.addHandler(this);
+                
+                //System.out.println("Key:"+objModel.getKey());
+                //System.out.println("SomeStringField:"+objModel.getSomeStringField());
+                //System.out.println("SomeIntegerField:"+objModel.getSomeIntegerField());
+                //System.out.println("SomeBooleanField:"+objModel.isSomeBooleanField());
             };
 
             objModel.refreshModel(false); //to update view
@@ -1039,17 +1073,17 @@ public class MainView
             switch (IO_FORMAT) {
                 case MvcModel.C_XML_IO: {
                     model = (MvcModel)MvcModel.ReadXml(filepath, model);
-
+                    //TODO:reset PropertyChanged handler
                     break;
                 }
                 case MvcModel.C_JSON_IO: {
                     model = MvcModel.ReadJson(filepath, model);
-
+                    //TODO:reset PropertyChanged handler
                     break;
                 }
                 case MvcModel.C_INI_IO: {
                     model = MvcModel.ReadIni(filepath, model);
-
+                    //NOTE:don't need to reset PropertyChanged handler
                     break;
                 }
                 default: {
